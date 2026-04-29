@@ -20,7 +20,10 @@ def voice_attendance_dialog(selected_subject_id):
 
     if st.button('Analyze Audio', width='stretch', type='primary'):
         with st.spinner('Prcessing Audio data'):
-            enrolled_res = supabase.table('subject_students').select("*, students(*)").eq('subject_id',selected_subject_id ).execute()
+            if not audio_data:
+                st.error('Please record audio first')
+                return
+            enrolled_res = supabase.table('subject_student').select("*, students(*)").eq('subject_id',selected_subject_id ).execute()
             enrolled_students = enrolled_res.data
 
             if not enrolled_students:
